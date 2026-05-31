@@ -5,10 +5,10 @@
 
 ## Team
 
-- **Asma Lehiany** — ML / backend / design / domain
-- **Oliver Pacheco Montero** —
-- **Anton Dudnik** —
-- **Shokhrukh Kholmatov** — some math background
+- **Asma Lehiany** — Machine learning pipeline, backend implementation, system design, and domain modeling
+- **Oliver Pacheco Montero** — Documentation and project presentation materials
+- **Anton Dudnik** — Data handling, validation, and compliance of external and aggregated macro datasets
+- **Shokhrukh Kholmatov** — Mathematical modeling, regression framework design, and interaction-term formulation for shock attribution
 
 **Track:** Forecasting AI (Sybilion)
 
