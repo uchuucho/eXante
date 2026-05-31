@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eXante — Mineral Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="loadingOverlay">
+  <div class="lo-logo">e<span>X</span>ante</div>
+  <div class="lo-sub">Loading mineral data…</div>
+  <div class="lo-bar"><div class="lo-fill"></div></div>
+</div>
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="logo">e<span>X</span>ante <span class="logo-tag">beta</span></div>
+    <div class="topbar-center">EV Mineral Intelligence</div>
+    <div class="topbar-right">
+      <div class="topbar-time" id="liveClock"></div>
+      <div class="status-dot"></div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <div class="panel-left">
+
+      <div class="panel-left-header">
+        <div>
+          <div class="chart-main-title">EV Mineral Decision</div>
+          <div class="chart-desc-sub">Past 12 months of price history plus the next 6 months of Sybilion forecast. Hover or scrub the chart for exact values.</div>
+        </div>
+      </div>
+
+      <div class="mineral-tabs">
+        <button class="mineral-tab active" onclick="selectMineral('lithium',this)">Lithium</button>
+        <button class="mineral-tab"        onclick="selectMineral('cobalt',this)">Cobalt</button>
+        <button class="mineral-tab"        onclick="selectMineral('manganese',this)">Manganese</button>
+        <button class="mineral-tab"        onclick="selectMineral('nickel',this)">Nickel</button>
+      </div>
+
+      <div class="shock-bar">
+        <span class="shock-bar-label">APPLY NEGATIVE SHOCK</span>
+        <div class="shock-pills">
+          <button class="shock-pill geo" onclick="toggleShock('geo',this)">
+            <span class="shock-icon">⚡</span>Geopolitical shock
+          </button>
+          <button class="shock-pill pol" onclick="toggleShock('pol',this)">
+            <span class="shock-icon">📋</span>Policy change
+          </button>
+          <button class="shock-pill min" onclick="toggleShock('min',this)">
+            <span class="shock-icon">⛏</span>Mining issue
+          </button>
+        </div>
+        <button class="reset-link" onclick="resetShocks()">Reset</button>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#7d8fa0"></span>History</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#00c896"></span>Forecast (p50)</div>
+          <div class="legend-item"><span class="legend-band"></span>Confidence band (p10–p90)</div>
+        </div>
+        <div class="chart-canvas-wrap">
+          <canvas id="mainChart"></canvas>
+        </div>
+      </div>
+
+      <div class="data-bar">
+        <div class="data-cell">
+          <div class="data-label">MONTH</div>
+          <div class="data-value" id="barMonth">—</div>
+        </div>
+        <div class="data-cell">
+          <div class="data-label">MEDIAN (P50)</div>
+          <div class="data-value accent" id="barP50">—</div>
+          <div class="data-unit" id="barUnit">—</div>
+        </div>
+        <div class="data-cell">
+          <div class="data-label">LOW (P10)</div>
+          <div class="data-value" id="barP10">—</div>
+          <div class="data-unit" id="barUnit2">—</div>
+        </div>
+        <div class="data-cell">
+          <div class="data-label">HIGH (P90)</div>
+          <div class="data-value" id="barP90">—</div>
+          <div class="data-unit" id="barUnit3">—</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="panel-right">
+
+      <div class="right-header">
+        <div class="right-mineral" id="rightMineralLabel">LITHIUM</div>
+        <div class="right-sublabel">AI recommendation</div>
+      </div>
+
+      <div class="rec-card">
+        <div class="rec-top">
+          <div>
+            <div class="rec-action" id="recAction">—</div>
+            <div class="rec-sub" id="recSub">—</div>
+          </div>
+          <div class="rec-ring-wrap">
+            <svg class="rec-ring" viewBox="0 0 52 52">
+              <circle cx="26" cy="26" r="22" fill="none" stroke="rgba(0,200,150,0.12)" stroke-width="4"/>
+              <circle id="recRingFill" cx="26" cy="26" r="22" fill="none"
+                stroke="var(--accent)" stroke-width="4" stroke-linecap="round"
+                stroke-dasharray="138.2" stroke-dashoffset="138.2"/>
+            </svg>
+            <div class="rec-ring-pct" id="recPct">—</div>
+          </div>
+        </div>
+        <div class="rec-divider"></div>
+        <div class="rec-desc" id="recDesc">—</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-key">SPOT TODAY</div>
+          <div class="stat-num" id="statSpot">—</div>
+          <div class="stat-unit" id="statUnit">—</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-key">EXPECTED</div>
+          <div class="stat-num" id="statExpected">—</div>
+          <div class="stat-delta" id="statDelta">—</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-key">WORST CASE</div>
+          <div class="stat-num" id="statWorst" style="color:var(--red)">—</div>
+          <div class="stat-unit">p90</div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title">KEY DRIVERS</div>
+        <div class="driver-chips" id="driverChips"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="js/data.js"></script>
+<script src="js/scenario.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
